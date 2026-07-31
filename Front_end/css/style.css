@@ -530,12 +530,11 @@ body {
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     padding: 15px;
-    position: relative;
+    position: relative; /* Bắt buộc phải có dòng này */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    /* Thêm thuộc tính này để chống bị ảnh tràn ra ngoài phá vỡ layout */
     overflow: hidden; 
 }
 
@@ -558,12 +557,12 @@ body {
 }
 
 .wishlist-btn {
-    position: absolute;
+    position: absolute; /* Bắt buộc phải có dòng này */
     top: 10px;
     right: 10px;
     border: none;
-    background: rgba(255, 255, 255, 0.9); /* Làm nền trắng đậm hơn chút để dễ nhìn */
-    width: 32px; /* Tăng kích thước bấm lên chút xíu */
+    background: rgba(255, 255, 255, 0.9);
+    width: 32px; 
     height: 32px;
     border-radius: 50%;
     cursor: pointer;
@@ -573,9 +572,7 @@ body {
     align-items: center;
     justify-content: center;
     transition: color 0.2s ease, background 0.2s ease;
-    
-    /* ĐÂY LÀ DÒNG QUAN TRỌNG NHẤT GIẢI QUYẾT LỖI */
-    z-index: 10; 
+    z-index: 99; /* Tăng z-index lên thật cao để chắc chắn nó nằm trên cùng */
 }
 
 .wishlist-btn:hover {
@@ -586,6 +583,8 @@ body {
 .product-img {
     text-align: center;
     margin-bottom: 12px;
+    position: relative; /* Thêm position relative cho phần chứa hình ảnh */
+    z-index: 1; /* Đảm bảo hình ảnh nằm dưới nút tim */
 }
 
 .product-img img {
