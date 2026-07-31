@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liên Hệ - BOOKORA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Top Announcement Bar & Header (Giống các trang trước) -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <p><i class="fa-solid fa-truck"></i> Free shipping for orders over 300.000đ</p>
+            <p class="welcome-msg">Welcome to BOOKORA - Read. Learn. Create.</p>
+            <div class="top-links">
+                <span>Hotline: 1900 636 081</span> <span>|</span> <a href="contact.html">Help & Support</a>
+            </div>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="container header-wrapper">
+            <a href="index.html" class="logo"><img src="images/logo.jpg" alt="BOOKORA Logo"></a>
+            <div class="search-box">
+                <input type="text" placeholder="Search books, stationery, and more...">
+                <select class="category-select"><option value="0">All</option></select>
+                <button type="submit" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <div class="header-actions">
+                <a href="wishlist.html" class="action-item"><div class="icon-wrap"><i class="fa-regular fa-heart"></i><span class="badge">0</span></div><span>Wishlist</span></a>
+                <a href="cart.html" class="action-item"><div class="icon-wrap"><i class="fa-solid fa-cart-shopping"></i><span class="badge">0</span></div><span>Cart</span></a>
+                <a href="#" class="action-item"><i class="fa-regular fa-user user-icon"></i><div class="user-text"><strong>My Account</strong><small>Login / Sign up</small></div></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation (Đã set active cho Contact) -->
+    <nav class="main-nav">
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+                <li class="dropdown"><a href="books.html"><i class="fa-solid fa-book"></i> Books <i class="fa-solid fa-chevron-down"></i></a></li>
+                <li class="dropdown"><a href="stationery.html"><i class="fa-solid fa-pen-nib"></i> Stationery <i class="fa-solid fa-chevron-down"></i></a></li>
+                <li class="dropdown"><a href="combos.html"><i class="fa-solid fa-box-open"></i> Combos <i class="fa-solid fa-chevron-down"></i></a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li class="active"><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Nội dung trang Contact -->
+    <section class="contact-section container">
+        <div class="contact-wrapper">
+            
+            <!-- Cột trái: Thông tin liên hệ -->
+            <div class="contact-info">
+                <h3>Thông Tin Liên Hệ</h3>
+                
+                <div class="info-item">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <div class="info-text">
+                        <h4>Địa chỉ cửa hàng</h4>
+                        <p>123 Đường sách Nguyễn Văn Bình<br>Quận 1, TP. Hồ Chí Minh, Việt Nam</p>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <div class="info-text">
+                        <h4>Điện thoại</h4>
+                        <p>Hotline: 1900 636 081<br>Hỗ trợ: 0987 654 321</p>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <i class="fa-solid fa-envelope"></i>
+                    <div class="info-text">
+                        <h4>Email</h4>
+                        <p>cskh@bookora.vn<br>hoptac@bookora.vn</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <i class="fa-regular fa-clock"></i>
+                    <div class="info-text">
+                        <h4>Giờ mở cửa</h4>
+                        <p>Thứ 2 - Thứ 6: 08:00 - 21:00<br>Thứ 7 - CN: 09:00 - 22:00</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cột phải: Form liên hệ -->
+            <div class="contact-form">
+                <h3>Gửi Lời Nhắn Cho Chúng Tôi</h3>
+                <form action="#" method="POST">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Họ và Tên *</label>
+                            <input type="text" id="name" class="form-control" placeholder="Nhập họ tên của bạn" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Địa chỉ Email *</label>
+                            <input type="email" id="email" class="form-control" placeholder="email@example.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Chủ đề</label>
+                        <input type="text" id="subject" class="form-control" placeholder="Bạn cần hỗ trợ vấn đề gì?">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Nội dung lời nhắn *</label>
+                        <textarea id="message" class="form-control" placeholder="Viết chi tiết nội dung cần hỗ trợ..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit"><i class="fa-solid fa-paper-plane"></i> GỬI LỜI NHẮN</button>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
