@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     /* ==============================================================
-       1. CHỨC NĂNG GIỎ HÀNG VÀ WISHLIST (LƯU LOCALSTORAGE)
+       1. CHỨC NĂNG GIỎ HÀNG VÀ WISHLIST (KẾT HỢP BACKEND & LOCALSTORAGE)
        ============================================================== */
     const cartBadges = document.querySelectorAll('.action-item .badge');
     
-    // Lấy số lượng từ LocalStorage
+    // Lấy số lượng từ LocalStorage (Giỏ hàng vẫn lưu tạm, Wishlist sẽ đồng bộ UI)
     let storedCart = parseInt(localStorage.getItem('cartCount')) || 0;
     let storedWishlist = parseInt(localStorage.getItem('wishCount')) || 0;
     
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     updateBadgeUI(); // Khởi tạo UI lần đầu
 
-    // 1.1 Sự kiện bấm "Add to Cart"
+    // 1.1 Sự kiện bấm "Add to Cart" (Tạm lưu LocalStorage)
     const addCartBtns = document.querySelectorAll('.add-cart-btn');
     addCartBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -28,40 +28,59 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 1.2 Sự kiện bấm Tim (Wishlist)
+    // 1.2 Sự kiện bấm Tim (Wishlist) - GỌI API BACKEND THỰC TẾ
     const wishlistBtns = document.querySelectorAll('.wishlist-btn');
     wishlistBtns.forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             
-            // Kiểm tra xem nút này đã được bấm tim chưa (dựa vào class 'active')
-            if (this.classList.contains('active')) {
-                // Nếu đã tim -> Bỏ tim
-                this.classList.remove('active');
-                
-                // Đổi icon lại thành viền rỗng
-                const icon = this.querySelector('i');
-                icon.classList.remove('fa-solid');
-                icon.classList.add('fa-regular');
+            const productId = this.getAttribute('data-id');
+            const icon = this.querySelector('i');
 
-                // Giảm số lượng
-                if(storedWishlist > 0) storedWishlist--;
-            } else {
-                // Nếu chưa tim -> Thả tim
-                this.classList.add('active');
-                
-                // Đổi icon thành khối đặc
-                const icon = this.querySelector('i');
-                icon.classList.remove('fa-regular');
-                icon.classList.add('fa-solid');
-
-                // Tăng số lượng
-                storedWishlist++;
+            if (!productId) {
+                console.error('Lỗi: Nút này chưa được gắn data-id của sản phẩm!');
+                return;
             }
-            
-            // Lưu lại vào trình duyệt và cập nhật UI
-            localStorage.setItem('wishCount', storedWishlist);
-            updateBadgeUI();
+
+            // Gửi dữ liệu qua AJAX (Fetch API) tới thư mục Back_end
+            fetch('/BanSach/Back_end/toggle_wishlist.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'product_id=' + productId
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'added') {
+                    // Trạng thái: Đã thêm -> Đổi thành tim đỏ đặc
+                    this.classList.add('active');
+                    icon.classList.remove('fa-regular');
+                    icon.classList.add('fa-solid');
+                    icon.style.color = '#e11d48';
+
+                    // Tăng số lượng UI
+                    storedWishlist++;
+                } 
+                else if (data.status === 'removed') {
+                    // Trạng thái: Đã xóa -> Đổi lại thành tim rỗng
+                    this.classList.remove('active');
+                    icon.classList.remove('fa-solid');
+                    icon.classList.add('fa-regular');
+                    icon.style.color = '';
+
+                    // Giảm số lượng UI
+                    if(storedWishlist > 0) storedWishlist--;
+                }
+                
+                // Lưu trạng thái số lượng mới vào LocalStorage và cập nhật Badge
+                localStorage.setItem('wishCount', storedWishlist);
+                updateBadgeUI();
+            })
+            .catch(error => {
+                console.error('Lỗi khi gọi API Wishlist:', error);
+                alert('Có lỗi xảy ra, vui lòng thử lại sau!');
+            });
         });
     });
 

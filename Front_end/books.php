@@ -85,7 +85,10 @@ include 'includes/header.php';
                             <span class="discount-tag">-<?php echo $item['discount_percent']; ?>%</span>
                         <?php endif; ?>
                         
-                        <button class="wishlist-btn"><i class="fa-regular fa-heart"></i></button>
+                        <!-- Đã bổ sung data-id vào nút thả tim -->
+                        <button class="wishlist-btn" data-id="<?php echo $item['id']; ?>">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
                         
                         <div class="product-img">
                             <img src="<?php echo htmlspecialchars($item['image_url']); ?>" alt="<?php echo htmlspecialchars($item['title']); ?>">
