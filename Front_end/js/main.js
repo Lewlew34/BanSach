@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
        ============================================================== */
     const cartBadges = document.querySelectorAll('.action-item .badge');
     
-    // Lấy số lượng từ LocalStorage (Giỏ hàng vẫn lưu tạm, Wishlist sẽ đồng bộ UI)
+    // Lấy số lượng từ LocalStorage để đồng bộ UI ban đầu
     let storedCart = parseInt(localStorage.getItem('cartCount')) || 0;
     let storedWishlist = parseInt(localStorage.getItem('wishCount')) || 0;
     
@@ -16,15 +16,54 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     updateBadgeUI(); // Khởi tạo UI lần đầu
 
-    // 1.1 Sự kiện bấm "Add to Cart" (Tạm lưu LocalStorage)
+    // 1.1 Sự kiện bấm "Add to Cart" - GỌI API BACKEND THỰC TẾ
     const addCartBtns = document.querySelectorAll('.add-cart-btn');
     addCartBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
-            e.preventDefault(); // Ngăn trình duyệt nhảy trang nếu là thẻ <a>
-            storedCart++;
-            localStorage.setItem('cartCount', storedCart);
-            updateBadgeUI();
-            alert('Đã thêm sản phẩm vào giỏ hàng!');
+            e.preventDefault(); // Ngăn trình duyệt nhảy trang
+            
+            // Lấy ID sản phẩm từ nút wishlist bên cạnh hoặc trực tiếp từ nút bấm
+            const productCard = btn.closest('.product-card');
+            const wishlistBtn = productCard ? productCard.querySelector('.wishlist-btn') : null;
+            const productId = wishlistBtn ? wishlistBtn.getAttribute('data-id') : btn.getAttribute('data-id');
+
+            if (!productId) {
+                alert('Không tìm thấy mã sản phẩm!');
+                return;
+            }
+
+            // Gửi dữ liệu qua Fetch API tới file backend giỏ hàng
+            fetch('/BanSach/Back_end/add_to_cart.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'product_id=' + productId
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Kiểm tra nếu chưa đăng nhập
+                if (data.status === 'unauthorized') {
+                    alert(data.message);
+                    window.location.href = '/BanSach/Front_end/login.php';
+                    return;
+                }
+
+                if (data.status === 'success') {
+                    // Cập nhật số lượng giỏ hàng thực tế từ cơ sở dữ liệu trả về
+                    storedCart = data.total_cart;
+                    localStorage.setItem('cartCount', storedCart);
+                    updateBadgeUI();
+                    
+                    alert('Đã thêm sản phẩm vào giỏ hàng thành công!');
+                } else {
+                    alert('Có lỗi xảy ra: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi khi thêm vào giỏ hàng:', error);
+                alert('Có lỗi xảy ra, vui lòng thử lại!');
+            });
         });
     });
 
@@ -52,6 +91,13 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(response => response.json())
             .then(data => {
+                // Kiểm tra nếu chưa đăng nhập
+                if (data.status === 'unauthorized') {
+                    alert(data.message);
+                    window.location.href = '/BanSach/Front_end/login.php';
+                    return;
+                }
+
                 if (data.status === 'added') {
                     // Trạng thái: Đã thêm -> Đổi thành tim đỏ đặc
                     this.classList.add('active');

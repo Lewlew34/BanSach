@@ -1,6 +1,13 @@
 <?php
+session_start();
 // Đường dẫn lùi ra 1 cấp (..) để vào thư mục config
 require_once '../config/db.php'; 
+
+// Kiểm tra xem người dùng đã đăng nhập chưa
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['status' => 'unauthorized', 'message' => 'Vui lòng đăng nhập để sử dụng tính năng này!']);
+    exit;
+}
 
 if (isset($_POST['product_id'])) {
     $product_id = intval($_POST['product_id']);
